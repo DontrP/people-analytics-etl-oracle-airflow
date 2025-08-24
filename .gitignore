@@ -1,0 +1,6 @@
+.venv/
+pycache/
+*.pyc
+.env
+airflow-docker/logs/
+airflow-docker/plugins/
