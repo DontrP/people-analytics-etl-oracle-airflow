@@ -1,33 +1,74 @@
 """
 ===============================================================================
-Airflow DAG: gold_layer_procedure
+Airflow DAG: load_gold_layer
 ===============================================================================
-Purpose:
-    Orchestrates the loading of Gold layer tables by invoking the 
-    Oracle procedures for dimensions and facts in the 'gold' schema.
+Author: Dollaya Piumsuwan
+Date: 2025-08-16
+Version: 1.0
 
-Features:
-    - Uses PythonOperator to call each stored procedure.
-    - Logs start and completion of each procedure.
-    - Defines proper dependencies between dimensions and fact tables.
+Purpose:
+    Orchestrates the loading of Gold layer star schema tables (dimensions and facts)
+    and aggregate tables for reporting purposes. All loading is done via 
+    Oracle stored procedures in the GOLD schema.
+
+Workflow:
+    1. Triggered by the Silver layer DAG or manually in Airflow UI/CLI.
+    2. Execute master Gold ETL procedure (gold.load_gold_layer) to load dimension 
+       and fact tables in the Gold schema.
+    3. Execute aggregate tables procedure (gold.load_aggregate_tables) for reporting.
+    4. Logging for start and completion of each procedure is performed.
+
+Tables handled:
+    - Dimension Tables:
+        * gold.dim_employee_star
+        * gold.dim_date
+        * gold.dim_trainer_star
+        * gold.dim_education_star
+        * gold.dim_training_program_star
+    - Fact Tables:
+        * gold.fact_employee_engagement_star
+        * gold.fact_recruitment_star
+        * gold.fact_training_star
+    - Aggregate/Reporting Tables:
+        * Populated via gold.load_aggregate_tables procedure
+
+Dependencies:
+    - Airflow connection 'oracle_default' must be configured with correct credentials.
+    - Gold schema tables and stored procedures must exist in Oracle.
+    - Silver ETL layer must have completed successfully and data available in Silver tables.
+
+Privileges:
+    - Gold ETL user must have EXECUTE privilege on procedures and INSERT/UPDATE on Gold tables.
+    - Read-only access may be granted to reporting users.
+
+Schedule:
+    Daily (@daily) or triggered manually.
 ===============================================================================
+
 """
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.hooks.base import BaseHook
 from airflow.utils.dates import days_ago
 import oracledb
 import logging
+from datetime import datetime
 
 def get_oracle_conn():
-    """Establishes a connection to the Oracle database using Airflow connection."""
+    """Establish an Oracle DB connection using Airflow's connection."""
     conn = BaseHook.get_connection("oracle_default")
     dsn = f"{conn.host}:{conn.port}/{conn.schema}"
     return oracledb.connect(user=conn.login, password=conn.password, dsn=dsn)
 
 def load_gold_proc(proc_name: str):
-    """Calls a Gold procedure by name to populate Gold tables."""
+    """
+    Call a Gold procedure to load tables.
+
+    Args:
+        proc_name (str): Name of the procedure in the GOLD schema.
+    """
     try:
         logging.info(f"Starting Gold procedure: {proc_name} ...")
         conn = get_oracle_conn()
@@ -42,53 +83,25 @@ def load_gold_proc(proc_name: str):
         raise
 
 with DAG(
-    dag_id="gold_layer_procedure",
-    start_date=days_ago(1),
-    schedule_interval=None,
+    dag_id="load_gold_layer",
+    start_date=datetime(2025, 1, 1),
+    schedule_interval="@daily",
     catchup=False,
-    tags=["etl", "oracle", "gold"],
-    description="Load Gold layer tables using Oracle procedures"
+    tags=["etl", "oracle", "gold", "star_schema", "aggregates"],
+    description="Load Gold layer star schema tables and aggregate tables"
 ) as dag:
-
-    # Dimension tasks
-    load_dim_date = PythonOperator(
-        task_id="load_dim_date",
+    
+    run_master_gold_etl = PythonOperator(
+        task_id="run_master_gold_etl",
         python_callable=load_gold_proc,
-        op_args=["load_dim_date"]
+        op_args=["load_gold_layer"]  # calls the master ETL procedure that handles all dimensions and facts
     )
 
-    load_dim_employee = PythonOperator(
-        task_id="load_dim_employee",
+    run_aggregate_etl = PythonOperator(
+        task_id="run_aggregate_tables",
         python_callable=load_gold_proc,
-        op_args=["load_dim_employee"]
+        op_args=["load_aggregate_tables"]  # calls the aggregate table procedure
     )
 
-    load_dim_training = PythonOperator(
-        task_id="load_dim_training",
-        python_callable=load_gold_proc,
-        op_args=["load_dim_training"]
-    )
 
-    # Fact tasks
-    load_fact_employee_engagement = PythonOperator(
-        task_id="load_fact_employee_engagement",
-        python_callable=load_gold_proc,
-        op_args=["load_fact_employee_engagement"]
-    )
-
-    load_fact_recruitment = PythonOperator(
-        task_id="load_fact_recruitment",
-        python_callable=load_gold_proc,
-        op_args=["load_fact_recruitment"]
-    )
-
-    load_fact_training = PythonOperator(
-        task_id="load_fact_training",
-        python_callable=load_gold_proc,
-        op_args=["load_fact_training"]
-    )
-
-    # Task dependencies
-    load_dim_date >> [load_dim_employee, load_dim_training]
-    load_dim_employee >> [load_fact_employee_engagement, load_fact_recruitment, load_fact_training]
-    load_dim_training >> load_fact_training
+    run_master_gold_etl >> run_aggregate_etl

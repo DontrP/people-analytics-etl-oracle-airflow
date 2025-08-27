@@ -1,16 +1,23 @@
 """
-DAG: load_bronze_layer
-======================
+===============================================================================
+Airflow DAG: load_bronze_layer
+===============================================================================
+Author: Dollaya Piumsuwan
+Date: 2025-08-15
+Version: 1.0
 
 Purpose:
-    Load raw CSV files into the Bronze layer (Oracle schema 'bronze').
+    Orchestrates the loading of Bronze layer tables from raw CSV files into 
+    the Oracle 'bronze' schema. Minimal transformations and type casting 
+    are performed during the load.
 
 Workflow:
-    1. Test Oracle connection.
-    2. Truncate target table.
-    3. Read CSV from /data/, map and cast columns to match Oracle table schema.
-    4. Bulk insert data into Bronze tables.
-    5. Trigger Silver layer DAG upon completion.
+    1. Triggered daily or manually via Airflow UI/CLI.
+    2. Test Oracle connection using Airflow connection 'oracle_default'.
+    3. Truncate target Bronze tables before loading.
+    4. Read CSV files from /data/, map and cast columns to match Oracle table schema.
+    5. Bulk insert data into Bronze tables.
+    6. Trigger Silver layer DAG (load_silver_layer) upon completion.
 
 Tables handled:
     - bronze.employee_data
@@ -19,12 +26,17 @@ Tables handled:
     - bronze.training_and_development_data
 
 Dependencies:
-    - Airflow connection 'oracle_default' with correct credentials.
-    - Bronze schema tables must already exist.
+    - Airflow connection 'oracle_default' must be configured with correct credentials.
+    - Bronze schema tables must already exist in Oracle.
     - CSV files must be present in /data/.
 
+Privileges:
+    - Airflow user must have INSERT, TRUNCATE, and SELECT privileges on Bronze tables.
+    - Users of Bronze tables (e.g., Silver ETL) should have SELECT access only.
+
 Schedule:
-    Daily (@daily)
+    Daily (@daily) or manually triggered.
+===============================================================================
 """
 
 
