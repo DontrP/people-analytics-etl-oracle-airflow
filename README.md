@@ -2,7 +2,7 @@
 
 ## Table of Contents
 - [English Version](#english-version)
-  - [System Overview](#system-overview)
+  - [Project Overview](#project-overview)
   - [Airflow Environment](#airflow-environment)
 - [Thai Version](#thai-version)
   - [ภาพรวมระบบ](#ภาพรวมระบบ)
@@ -11,9 +11,24 @@
 
 ## English Version
 
+### Project Overview
+
 This system is designed to process and store HR data using Apache Airflow for ETL (Extract, Transform, Load) workflow management and Oracle Database for structured storage in a medallion architecture: Bronze, Silver, and Gold layers. The architecture allows clean separation of raw, processed, and analytical-ready data to support HR analytics and reporting.
 
+**System Components**
+* Airflow Environment: Manages and executes DAGs (Directed Acyclic Graphs) for ETL workflows.
+* Oracle Database: Stores data across different layers (Bronze, Silver, Gold).
+* Data Files: Source CSV files containing raw HR data.
 
+Airflow reads the CSV files from the [data/](data/) folder, processes them, and loads the results into Oracle Database using SQL scripts located in [scripts/](scripts/).
+
+### Airflow Environment
+The Airflow environment is defined using [airflow-docker/docker-compose.yml](airflow-docker/docker-compose.yml) and [airflow-docker/Dockerfile](airflow-docker/Dockerfile). Key components include:
+Webserver: Web interface for monitoring and managing DAGs.
+Scheduler: Executes DAGs according to the schedule.
+Worker: Runs individual task instances in DAGs.
+PostgreSQL: Metadata database for Airflow.
+Oracle Database: Target database for HR analytics.
 
 ## Thai Version
 
