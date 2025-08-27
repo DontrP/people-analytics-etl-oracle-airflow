@@ -3,7 +3,7 @@
 DDL Script: Create Bronze Tables for Oracle
 ===============================================================
 Author: Dollaya Piumsuwan
-Date: 2025-08-20
+Date: 2025-08-10
 Version: 1.0
 
 Purpose:

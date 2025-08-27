@@ -3,7 +3,7 @@
 Procedure Name: SILVER.LOAD_SILVER
 ===============================================================================
 Author: Dollaya Piumsuwan
-Date: 2025-08-21
+Date: 2025-08-11
 Version: 1.0
 
 Purpose:
@@ -19,17 +19,25 @@ Actions:
 Dependencies:
     - Bronze tables must exist.
     - Silver schema tables must be created before execution.
+    - Bronze user/schema should provide read-only access to Silver users
+      for any required audit or incremental queries.
+
+Privileges:
+    - Login as Bronze user to read raw data.
+    - Silver users should have SELECT privileges on Bronze tables only; they
+      do not modify Bronze data.
 
 Parameters:
     None
 
-Usage:
+Usage without Airflow:
     EXEC SILVER.LOAD_SILVER;
 
 Notes:
     This procedure is designed to be part of the ETL workflow from Bronze to Silver.
 ===============================================================================
 */
+
 
 
 create or replace procedure silver.load_silver as
@@ -94,7 +102,7 @@ begin
              case
                 when upper(emp_termination_type) = N'UNK' then
                    N'n/a'
-                when emp_exitdate is not null then
+                when emp_exitdate is null then
                    N'n/a'
                 else
                    to_nchar(trim(emp_termination_type))

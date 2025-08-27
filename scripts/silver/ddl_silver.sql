@@ -3,7 +3,7 @@
 DDL Script: Create Silver Tables (Oracle Compatible)
 ===============================================================================
 Author: Dollaya Piumsuwan
-Date: 2025-08-21
+Date: 2025-08-11
 Version: 1.0
 
 Purpose:
@@ -83,6 +83,59 @@ create table silver.employee_data (
    dwh_create_date      timestamp default systimestamp
 );
 
+comment on column silver.employee_data.emp_id is
+   'Employee ID from source system';
+comment on column silver.employee_data.emp_firstname is
+   'Employee first name';
+comment on column silver.employee_data.emp_lastname is
+   'Employee last name';
+comment on column silver.employee_data.emp_startdate is
+   'Employee start date';
+comment on column silver.employee_data.emp_exitdate is
+   'Employee exit date';
+comment on column silver.employee_data.emp_position is
+   'Employee job position';
+comment on column silver.employee_data.emp_supervisor is
+   'Supervisor name';
+comment on column silver.employee_data.emp_email is
+   'Corporate email address';
+comment on column silver.employee_data.emp_unit is
+   'Business unit';
+comment on column silver.employee_data.emp_status is
+   'Employment status';
+comment on column silver.employee_data.emp_type is
+   'Employee type';
+comment on column silver.employee_data.emp_payzone is
+   'Pay zone';
+comment on column silver.employee_data.emp_classification is
+   'Employee classification';
+comment on column silver.employee_data.emp_termination_type is
+   'Termination type';
+comment on column silver.employee_data.emp_department is
+   'Department name';
+comment on column silver.employee_data.emp_division is
+   'Division name';
+comment on column silver.employee_data.emp_dob is
+   'Date of birth';
+comment on column silver.employee_data.emp_state is
+   'Work state';
+comment on column silver.employee_data.emp_job_function is
+   'Job function';
+comment on column silver.employee_data.emp_gender is
+   'Employee gender';
+comment on column silver.employee_data.emp_location is
+   'Work location';
+comment on column silver.employee_data.emp_race is
+   'Employee race';
+comment on column silver.employee_data.emp_marital is
+   'Marital status';
+comment on column silver.employee_data.emp_score is
+   'Performance score in text';
+comment on column silver.employee_data.emp_rating is
+   'Performance rating (numeric)';
+comment on column silver.employee_data.dwh_create_date is
+   'Record creation timestamp in data warehouse';
+
 -- Create employee_engagement_survey_data table
 create table silver.employee_engagement_survey_data (
    emp_id                        nvarchar2(50),
@@ -92,6 +145,19 @@ create table silver.employee_engagement_survey_data (
    emp_work_life_balance_score   number,
    dwh_create_date               timestamp default systimestamp
 );
+
+comment on column silver.employee_engagement_survey_data.emp_id is
+   'Employee ID';
+comment on column silver.employee_engagement_survey_data.emp_engagement_survey_date is
+   'Survey date';
+comment on column silver.employee_engagement_survey_data.emp_engagement_survey_score is
+   'Engagement survey score';
+comment on column silver.employee_engagement_survey_data.emp_satisfaction_survey_score is
+   'Satisfaction survey score';
+comment on column silver.employee_engagement_survey_data.emp_work_life_balance_score is
+   'Work-life balance survey score';
+comment on column silver.employee_engagement_survey_data.dwh_create_date is
+   'Record creation timestamp in data warehouse';
 
 -- Create recruitment_data table
 create table silver.recruitment_data (
@@ -116,6 +182,46 @@ create table silver.recruitment_data (
    dwh_create_date          timestamp default systimestamp
 );
 
+comment on column silver.recruitment_data.applicant_id is
+   'Applicant ID';
+comment on column silver.recruitment_data.application_date is
+   'Application date';
+comment on column silver.recruitment_data.applicant_firstname is
+   'Applicant first name';
+comment on column silver.recruitment_data.applicant_lastname is
+   'Applicant last name';
+comment on column silver.recruitment_data.applicant_gender is
+   'Applicant gender';
+comment on column silver.recruitment_data.applicant_dob is
+   'Applicant date of birth';
+comment on column silver.recruitment_data.applicant_phone is
+   'Applicant phone number';
+comment on column silver.recruitment_data.applicant_email is
+   'Applicant email address';
+comment on column silver.recruitment_data.applicant_address is
+   'Applicant address';
+comment on column silver.recruitment_data.applicant_city is
+   'Applicant city';
+comment on column silver.recruitment_data.applicant_state is
+   'Applicant state';
+comment on column silver.recruitment_data.applicant_zip is
+   'Applicant ZIP code';
+comment on column silver.recruitment_data.applicant_country is
+   'Applicant country';
+comment on column silver.recruitment_data.applicant_education is
+   'Applicant education level';
+comment on column silver.recruitment_data.applicant_experience is
+   'Years of experience of applicant';
+comment on column silver.recruitment_data.applicant_desired_salary is
+   'Desired salary of applicant';
+comment on column silver.recruitment_data.applicant_job_title is
+   'Job title applied for';
+comment on column silver.recruitment_data.applicant_status is
+   'Application status';
+comment on column silver.recruitment_data.dwh_create_date is
+   'Record creation timestamp in data warehouse';
+
+
 -- Create training_and_development_data table
 create table silver.training_and_development_data (
    emp_id                nvarchar2(50),
@@ -129,3 +235,24 @@ create table silver.training_and_development_data (
    training_cost         number(18,2),
    dwh_create_date       timestamp default systimestamp
 );
+
+comment on column silver.training_and_development_data.emp_id is
+   'Employee ID';
+comment on column silver.training_and_development_data.training_date is
+   'Date of training';
+comment on column silver.training_and_development_data.training_program_name is
+   'Training program name';
+comment on column silver.training_and_development_data.training_type is
+   'Training type';
+comment on column silver.training_and_development_data.training_outcome is
+   'Outcome of the training';
+comment on column silver.training_and_development_data.location is
+   'Location of training';
+comment on column silver.training_and_development_data.trainer is
+   'Trainer name';
+comment on column silver.training_and_development_data.training_duration is
+   'Duration of training in days';
+comment on column silver.training_and_development_data.training_cost is
+   'Cost of training';
+comment on column silver.training_and_development_data.dwh_create_date is
+   'Record creation timestamp in data warehouse';

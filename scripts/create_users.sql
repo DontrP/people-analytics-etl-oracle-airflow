@@ -20,6 +20,7 @@ WARNING:
     Running this script will permanently drop the BRONZE, SILVER,
     and GOLD schemas if they exist, including all contained data.
     Ensure you have proper backups before execution.
+=====================================================
 */
 
 -- Drop schemas if they already exist
