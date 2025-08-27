@@ -2,22 +2,35 @@
 ===============================================================================
 Procedure Name: SILVER.LOAD_SILVER
 ===============================================================================
+Author: Dollaya Piumsuwan
+Date: 2025-08-21
+Version: 1.0
+
 Purpose:
     ETL procedure to populate Silver schema tables from Bronze tables.
-    Minimal transformations: trimming, type casting, and basic cleansing.
+    Performs minimal transformations: trimming, type casting, basic cleansing,
+    and status mapping.
 
 Actions:
     - Truncates Silver tables.
     - Inserts transformed data from Bronze to Silver.
-    - Ensures data consistency (dates, numeric conversions, status mapping).
+    - Ensures data consistency for dates, numeric fields, and status values.
+
+Dependencies:
+    - Bronze tables must exist.
+    - Silver schema tables must be created before execution.
 
 Parameters:
     None
 
 Usage:
     EXEC SILVER.LOAD_SILVER;
+
+Notes:
+    This procedure is designed to be part of the ETL workflow from Bronze to Silver.
 ===============================================================================
 */
+
 
 create or replace procedure silver.load_silver as
 begin
@@ -80,6 +93,8 @@ begin
              to_nchar(trim(emp_classification)),
              case
                 when upper(emp_termination_type) = N'UNK' then
+                   N'n/a'
+                when emp_exitdate is not null then
                    N'n/a'
                 else
                    to_nchar(trim(emp_termination_type))
@@ -161,27 +176,19 @@ begin
                    to_date(applicant_dob,
                            'DD-MM-YYYY')
              end,
-             replace(
+             regexp_replace(
                 replace(
                    replace(
-                      replace(
-                         replace(
-                            to_nchar(trim(applicant_phone)),
-                            '(',
-                            ''
-                         ),
-                         ')',
-                         ''
-                      ),
-                      '-',
-                      ''
+                      upper(applicant_phone),
+                      'X',
+                      'EXT.'
                    ),
-                   '.',
-                   ''
+                   'x',
+                   'ext.'
                 ),
-                '+',
+                '[^0-9EXT.]',  -- Remove everything except digits and 'EXT.'
                 ''
-             ),
+             ) as applicant_phone,
              to_nchar(trim(applicant_email)),
              to_nchar(trim(applicant_address)),
              to_nchar(trim(applicant_city)),

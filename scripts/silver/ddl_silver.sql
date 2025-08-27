@@ -2,12 +2,24 @@
 ===============================================================================
 DDL Script: Create Silver Tables (Oracle Compatible)
 ===============================================================================
-Script Purpose:
-    This script creates tables in the 'SILVER' schema in Oracle, dropping existing tables 
-    if they already exist.
-    Run this script to re-define the DDL structure of 'SILVER' tables.
+Author: Dollaya Piumsuwan
+Date: 2025-08-21
+Version: 1.0
+
+Purpose:
+    Create tables in the 'SILVER' schema in Oracle.
+    Drops existing tables if they already exist.
+    Silver tables store cleaned, standardized, and enriched data 
+    derived from the raw Bronze layer for downstream analytics.
+
+Notes:
+    - Bronze tables must exist before running this script.
+    - Silver tables typically include data type normalization, 
+      derived columns, and auditing fields (e.g., dwh_create_date).
+    - Run this script to re-define the DDL structure of Silver tables.
 ===============================================================================
 */
+
 
 -- Drop tables if they exist
 declare
