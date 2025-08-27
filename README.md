@@ -3,7 +3,7 @@
 ## Table of Contents
 - [English Version](#english-version)
   - [Project Overview](#project-overview)
-  - [Data Architecture: Medallion Layers](#data-architecture)
+  - [Data Architecture: Medallion Layers](#data-architecture-medallion-layers)
   - [Airflow Environment](#airflow-environment)
   - [Data Pipeline (DAGs)](#data-pipeline-dags)
   - [Data Files](#data-files)
