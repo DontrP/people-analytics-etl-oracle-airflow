@@ -46,7 +46,7 @@ DAGs are stored in [airflow-docker/dags/](airflow-docker/dags/). Each DAG repres
   * Creates views or star schema tables using SQL (ddl_gold.sql, proc_gold_agg.sql, proc_gold_star.sql).
  
 ### Data Files
-Datasets are retrieved from Ravender Singh Rana. (2023). Employee/HR Dataset (All in One) [Data set]. Kaggle. https://doi.org/10.34740/KAGGLE/DS/3620223
+Datasets are retrieved from Ravender Singh Rana. (2023). Employee/HR Dataset (All in One) [Data set]. Kaggle. https://doi.org/10.34740/KAGGLE/DS/3620223.
 CSV files in [data/](data/) are the source for ETL workflows:
 * employee_data.csv
 * employee_engagement_survey_data.csv
@@ -54,8 +54,16 @@ CSV files in [data/](data/) are the source for ETL workflows:
 * training_and_development_data.csv
 
 ### Airflow & Dependencies
-Python dependencies are listed in [requirements.txt](requirements.txt), including Airflow, Airflow providers for Oracle, Docker, Pandas, SQLAlchemy, and cx_Oracle.
-[airflow-docker/Dockerfile](airflow-docker/Dockerfile) sets up the Airflow environment on python:3.9-slim-buster and installs necessary dependencies.
+* Python dependencies are listed in [requirements.txt](requirements.txt), including Airflow, Airflow providers for Oracle, Docker, Pandas, SQLAlchemy, and cx_Oracle.
+* [airflow-docker/Dockerfile](airflow-docker/Dockerfile) sets up the Airflow environment on python:3.9-slim-buster and installs necessary dependencies.
+
+### Database Connections in DAGs
+DAGs use OracleHook or OracleOperator to execute SQL scripts on Oracle Database. Connection details (host, port, user, password, service name) are configured in Airflow Connections.
+
+### Data Architecture: Medallion Layers
+* Bronze: Raw data ingestion; tables closely match the source CSV structure.
+* Silver: Cleaned and transformed data; additional columns are derived, and data from multiple sources is combined.
+* Gold: Analytics-ready layer; aggregates and structured tables for reporting, often in star schema format.
 
 ## Thai Version
 
