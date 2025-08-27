@@ -1,9 +1,12 @@
 # Data Engineering for HR: ETL Pipeline with Oracle Database and Apache Airflow
 
+----------------------------------------------------------------------------------
+
 ## Table of Contents
 - [English Version](#english-version)
   - [Project Overview](#project-overview)
   - [Airflow Environment](#airflow-environment)
+  - [Data Pipeline (DAGs)](#data-pipeline-dags)
 - [Thai Version](#thai-version)
   - [ภาพรวมระบบ](#ภาพรวมระบบ)
   - [Airflow Environment](#airflow-environment-1)
@@ -24,11 +27,24 @@ Airflow reads the CSV files from the [data/](data/) folder, processes them, and 
 
 ### Airflow Environment
 The Airflow environment is defined using [airflow-docker/docker-compose.yml](airflow-docker/docker-compose.yml) and [airflow-docker/Dockerfile](airflow-docker/Dockerfile). Key components include:
-Webserver: Web interface for monitoring and managing DAGs.
-Scheduler: Executes DAGs according to the schedule.
-Worker: Runs individual task instances in DAGs.
-PostgreSQL: Metadata database for Airflow.
-Oracle Database: Target database for HR analytics.
+* Webserver: Web interface for monitoring and managing DAGs.
+* Scheduler: Executes DAGs according to the schedule.
+* Worker: Runs individual task instances in DAGs.
+* PostgreSQL: Metadata database for Airflow.
+* Oracle Database: Target database for HR analytics.
+
+### Data Pipelines (DAGs)
+DAGs are stored in [airflow-docker/dags/](airflow-docker/dags/). Each DAG represents an ETL workflow for a specific layer:
+* Bronze Layer (load_bronze_layer.py):
+  * Loads raw CSV files into the Bronze tables.
+  * Uses PythonOperator or BashOperator to run SQL scripts (ddl_bronze.sql).
+  * Reads CSV files from [data/](data/).
+* Silver Layer (load_silver_layer.py):
+  * Processes Bronze data and loads it into Silver tables.
+  * Applies data cleaning, transformation, and type conversion using SQL (ddl_silver.sql, proc_silver.sql).
+* Gold Layer (load_gold_layer.py):
+  * Aggregates and transforms Silver data for analytics-ready tables.
+  * Creates views or star schema tables using SQL (ddl_gold.sql, proc_gold_agg.sql, proc_gold_star.sql).
 
 ## Thai Version
 
