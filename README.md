@@ -5,13 +5,14 @@
   - [Project Overview](#project-overview)
   - [Data Architecture: Medallion Layers](#data-architecture-medallion-layers)
   - [Airflow Environment](#airflow-environment)
-  - [Data Pipeline (DAGs)](#data-pipeline-(dags))
+  - [Data Pipelines DAGs](#data-pipelines-dags)
   - [Data Files](#data-files)
-  - [Airflow & Dependencies](#arflow-dependencies)
-  - [Database Connections in DAGs](#database-connection)
+  - [Airflow & Dependencies](#airflow--dependencies)
+  - [Database Connections in DAGs](#database-connections-in-dags)
 - [Thai Version](#thai-version)
   - [ภาพรวมระบบ](#ภาพรวมระบบ)
   - [Airflow Environment](#airflow-environment-1)
+
 
 
 ## English Version
