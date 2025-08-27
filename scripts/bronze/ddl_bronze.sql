@@ -14,6 +14,7 @@ Purpose:
 Notes:
     - BRONZE tables are raw and untransformed.
     - Each table corresponds to a source system/entity.
+===============================================================================
 */
 
 -- Drop tables if they exist
