@@ -113,7 +113,7 @@ Airflow จะอ่านไฟล์ CSV จากโฟลเดอร์ `[d
 
 ### Airflow Environment
 
-Airflow ถูกตั้งค่าผ่าน `[airflow-docker/docker-compose.yml](airflow-docker/docker-compose.yml)` และ `[airflow-docker/Dockerfile](airflow-docker/Dockerfile)` ประกอบด้วย:
+Airflow ถูกตั้งค่าผ่าน [airflow-docker/docker-compose.yml](airflow-docker/docker-compose.yml) และ [airflow-docker/Dockerfile](airflow-docker/Dockerfile) ประกอบด้วย:
 
 - **Webserver**: หน้าเว็บสำหรับตรวจสอบและจัดการ DAGs  
 - **Scheduler**: รัน DAGs ตามเวลาที่กำหนด  
@@ -125,7 +125,7 @@ Airflow ถูกตั้งค่าผ่าน `[airflow-docker/docker-compo
 
 ### Data Pipeline (DAGs)
 
-DAGs อยู่ใน `[airflow-docker/dags/](airflow-docker/dags/)` แต่ละ DAG เป็นเวิร์กโฟลว์ ETL สำหรับเลเยอร์เฉพาะ:
+DAGs อยู่ใน [airflow-docker/dags/](airflow-docker/dags/) แต่ละ DAG เป็นเวิร์กโฟลว์ ETL สำหรับเลเยอร์เฉพาะ:
 
 - **Bronze Layer (`load_bronze_layer.py`)**:  
   - โหลดข้อมูลดิบจาก CSV  
@@ -143,7 +143,7 @@ DAGs อยู่ใน `[airflow-docker/dags/](airflow-docker/dags/)` แต่
 ---
 
 ### ไฟล์ข้อมูล
-ใช้ข้อมูลจำลองจาก Singh Rana. (2023). Employee/HR Dataset (All in One) [Data set]. Kaggle. https://doi.org/10.34740/KAGGLE/DS/3620223. โดยไฟล์ CSV ใน `[data/](data/)` เป็นแหล่งข้อมูลสำหรับ DAGs ประกอบด้วย:
+ใช้ข้อมูลจำลองจาก Singh Rana. (2023). Employee/HR Dataset (All in One) [Data set]. Kaggle. https://doi.org/10.34740/KAGGLE/DS/3620223. โดยไฟล์ CSV ใน [data/](data/) เป็นแหล่งข้อมูลสำหรับ DAGs ประกอบด้วย:
 
 - `employee_data.csv`  
 - `employee_engagement_survey_data.csv`  
@@ -154,8 +154,8 @@ DAGs อยู่ใน `[airflow-docker/dags/](airflow-docker/dags/)` แต่
 
 ### Airflow & Dependencies
 
-- Dependencies ของ Python อยู่ใน `[requirements.txt](requirements.txt)` เช่น Airflow, Airflow providers สำหรับ Oracle, Docker, Pandas, SQLAlchemy, cx_Oracle  
-- `[airflow-docker/Dockerfile](airflow-docker/Dockerfile)` ใช้ `python:3.9-slim-buster` เป็น base image และติดตั้ง dependencies ที่จำเป็น  
+- Dependencies ของ Python อยู่ใน [requirements.txt](requirements.txt) เช่น Airflow, Airflow providers สำหรับ Oracle, Docker, Pandas, SQLAlchemy, cx_Oracle  
+- [airflow-docker/Dockerfile](airflow-docker/Dockerfile) ใช้ python:3.9-slim-buster เป็น base image และติดตั้ง dependencies ที่จำเป็น  
 
 ---
 
