@@ -1,6 +1,30 @@
-.venv/
-pycache/
+# --- Python ---
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.db
+*.egg-info/
+.venv/
+venv/
+
+# --- Environment / Secrets ---
 .env
-airflow-docker/logs/
-airflow-docker/plugins/
+.envrc
+
+# --- Airflow ---
+airflow-docker/logs/       
+airflow-docker/plugins/__pycache__/  
+
+# --- Docker ---
+.docker/
+.dockerignore
+
+# --- IDE / Editor ---
+.vscode/
+.idea/
+*.iml
+
+# --- OS ---
+.DS_Store
+Thumbs.db
