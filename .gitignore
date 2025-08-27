@@ -28,3 +28,7 @@ airflow-docker/plugins/__pycache__/
 # --- OS ---
 .DS_Store
 Thumbs.db
+
+# Codeviz
+.codeviz/
+CLAUDE.md
