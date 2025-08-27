@@ -17,7 +17,6 @@
   - [ไฟล์ข้อมูล](#ไฟล์ข้อมูล)
   - [Airflow & Dependencies](#airflow--dependencies-1)
   - [การเชื่อมต่อฐานข้อมูลใน DAGs](#การเชื่อมต่อฐานข้อมูลใน-dags)
-- [Recreate Project Step-by-step](#recreate-project-step-by-step)
 
 ---
 
@@ -163,62 +162,6 @@ DAGs อยู่ใน `[airflow-docker/dags/](airflow-docker/dags/)` แต่
 ### การเชื่อมต่อฐานข้อมูลใน DAGs
 
 DAGs ใช้ `OracleHook` หรือ `OracleOperator` รัน SQL บน Oracle Database โดยการตั้งค่าการเชื่อมต่อ (host, port, user, password, service name) อยู่ใน Airflow Connections  
-
-## Recreate Project Step-by-Step
-
-Follow these steps to set up the HR Data Warehouse project locally.
-
----
-
-### 1. Set Up Local Environment
-
-Install Python and create a virtual environment:
-
-```bash
-# Install pyenv (if not installed)
-brew install pyenv
-
-# Check Python version
-which python
-python3 --version
-pyenv versions
-
-# Install and select Python version for this project
-pyenv install 3.9.18
-pyenv local 3.9.18
-exec "$SHELL"
-
-# Create and activate virtual environment
-python -m venv venv
-source venv/bin/activate
-
-# Upgrade pip
-pip install --upgrade pip
-```
----
-
-### 2. Create Project Directory
-```bash
-mkdir -p hr-dwh-oracle-airflow/{airflow-docker/dags,data,scripts}
-cd hr-dwh-oracle-airflow
-```
-
----
-
-### 3. Initialize Git and Add .gitignore
-```bash
-git init
-
-# Create .gitignore:
-venv/
-**pycache**/
-*.pyc
-.env
-airflow-docker/logs/
-airflow-docker/plugins/
-```
-
---
 
 
 
