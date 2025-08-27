@@ -3,9 +3,12 @@
 ## Table of Contents
 - [English Version](#english-version)
   - [Project Overview](#project-overview)
+  - [Data Architecture: Medallion Layers](#data-architecture)
   - [Airflow Environment](#airflow-environment)
   - [Data Pipeline (DAGs)](#data-pipeline-dags)
   - [Data Files](#data-files)
+  - [Airflow & Dependencies](#arflow-dependencies)
+  - [Database Connections in DAGs](#database-connection)
 - [Thai Version](#thai-version)
   - [ภาพรวมระบบ](#ภาพรวมระบบ)
   - [Airflow Environment](#airflow-environment-1)
@@ -23,6 +26,11 @@ This system is designed to process and store HR data using Apache Airflow for ET
 * Data Files: Source CSV files containing raw HR data.
 
 Airflow reads the CSV files from the [data/](data/) folder, processes them, and loads the results into Oracle Database using SQL scripts located in [scripts/](scripts/).
+
+### Data Architecture: Medallion Layers
+* Bronze: Raw data ingestion; tables closely match the source CSV structure.
+* Silver: Cleaned and transformed data; additional columns are derived, and data from multiple sources is combined.
+* Gold: Analytics-ready layer; aggregates and structured tables for reporting, often in star schema format.
 
 ### Airflow Environment
 The Airflow environment is defined using [airflow-docker/docker-compose.yml](airflow-docker/docker-compose.yml) and [airflow-docker/Dockerfile](airflow-docker/Dockerfile). Key components include:
@@ -59,11 +67,6 @@ CSV files in [data/](data/) are the source for ETL workflows:
 
 ### Database Connections in DAGs
 DAGs use OracleHook or OracleOperator to execute SQL scripts on Oracle Database. Connection details (host, port, user, password, service name) are configured in Airflow Connections.
-
-### Data Architecture: Medallion Layers
-* Bronze: Raw data ingestion; tables closely match the source CSV structure.
-* Silver: Cleaned and transformed data; additional columns are derived, and data from multiple sources is combined.
-* Gold: Analytics-ready layer; aggregates and structured tables for reporting, often in star schema format.
 
 ## Thai Version
 
