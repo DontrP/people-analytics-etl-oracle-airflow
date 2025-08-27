@@ -1,4 +1,4 @@
-# Data Engineering for HR: ETL Pipeline with Oracle Database and Apache Airflow
+# Data Engineering for Human Resource Management: ETL Pipeline with Oracle Database and Apache Airflow
 
 ## Table of Contents
 - [English Version](#english-version)
