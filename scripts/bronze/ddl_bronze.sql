@@ -2,9 +2,18 @@
 ===============================================================
 DDL Script: Create Bronze Tables for Oracle
 ===============================================================
-Script Purpose:
-    This script creates tables in the 'BRONZE' schema, dropping existing tables
-    if they already exist. Run this script to re-define the DDL structure of 'BRONZE' tables.
+Author: Dollaya Piumsuwan
+Date: 2025-08-20
+Version: 1.0
+
+Purpose:
+    Creates raw (Bronze) tables in the 'BRONZE' schema.
+    Drops existing tables if they exist. These tables store 
+    source-level data before any transformation.
+
+Notes:
+    - BRONZE tables are raw and untransformed.
+    - Each table corresponds to a source system/entity.
 */
 
 -- Drop tables if they exist
