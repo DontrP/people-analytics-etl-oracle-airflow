@@ -1,6 +1,19 @@
 # Data Engineering for HR: ETL Pipeline with Oracle Database and Apache Airflow
 
+## Table of Contents
+- [English Version](#english-version)
+  - [System Overview](#system-overview)
+  - [Airflow Environment](#airflow-environment)
+- [Thai Version](#thai-version)
+  - [ภาพรวมระบบ](#ภาพรวมระบบ)
+  - [Airflow Environment](#airflow-environment-1)
+
+
 ## English Version
+
+This system is designed to process and store HR data using Apache Airflow for ETL (Extract, Transform, Load) workflow management and Oracle Database for structured storage in a medallion architecture: Bronze, Silver, and Gold layers. The architecture allows clean separation of raw, processed, and analytical-ready data to support HR analytics and reporting.
+
+
 
 ## Thai Version
 
