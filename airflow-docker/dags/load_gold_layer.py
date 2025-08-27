@@ -36,6 +36,11 @@ Dependencies:
     - Airflow connection 'oracle_default' must be configured with correct credentials.
     - Gold schema tables and stored procedures must exist in Oracle.
     - Silver ETL layer must have completed successfully and data available in Silver tables.
+    - Silver schema must grant SELECT privileges on required Silver tables to the Gold schema:
+        * silver.employee_data
+        * silver.employee_engagement_survey_data
+        * silver.recruitment_data
+        * silver.training_and_development_data
 
 Privileges:
     - Gold ETL user must have EXECUTE privilege on procedures and INSERT/UPDATE on Gold tables.

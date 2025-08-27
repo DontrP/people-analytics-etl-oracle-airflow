@@ -1,63 +1,48 @@
 /*
 ===============================================================================
-Airflow DAG / Oracle Procedures: load_gold_layer
+Procedure Name: gold.cleanup_fact_tables, gold.add_default_dimension_records,
+                gold.load_dim_date, gold.load_dim_employee,
+                gold.load_dim_education_star, gold.load_dim_training_program_star,
+                gold.load_dim_trainer_star, gold.load_fact_employee_engagement,
+                gold.load_fact_recruitment, gold.load_fact_training,
+                gold.load_gold_layer
 ===============================================================================
 Author: Dollaya Piumsuwan
 Date: 2025-08-12
-Version: 1.0
+Version: 1.1
 
 Purpose:
-    Orchestrates the loading of Gold layer star schema tables (dimensions and fact tables)
-    from Silver layer tables. Populates default/unknown records, surrogate keys,
-    and aggregates for reporting efficiency.
-
-Workflow:
-    1. Cleanup Fact Tables
-        - Deletes all rows from fact_training_star, fact_recruitment_star, and fact_employee_engagement_star
-    2. Load Dim_Date
-        - Populates date dimension from 2000-01-01 to 2050-12-31
-        - Includes day, month, quarter, year, week_of_year, is_weekend, is_holiday
-    3. Add Default / Unknown Dimension Records
-        - Ensures employee, education, and trainer dimensions have default unknown records
-    4. Load Dimension Tables
-        - dim_employee_star from silver.employee_data
-        - dim_education_star from silver.recruitment_data
-        - dim_training_program_star from silver.training_and_development_data
-        - dim_trainer_star from silver.training_and_development_data
-    5. Load Fact Tables
-        - fact_employee_engagement_star from silver.employee_engagement_survey_data
-        - fact_recruitment_star from silver.recruitment_data
-        - fact_training_star from silver.training_and_development_data
-    6. Commit All Changes
-        - Exception handling with rollback on errors
+    ETL procedures to populate Gold schema tables from Silver tables.
+    Populates dimension and fact tables, handles default/unknown records,
+    and maintains surrogate keys for referential integrity.
 
 Dependencies:
-    - Airflow connection 'oracle_default' must be configured with correct credentials.
-    - Silver schema tables must exist and be pre-loaded.
-    - Gold dimension tables must exist.
-    - Gold layer must have SELECT privileges on all required Silver tables:
+    - Silver tables must exist and be populated:
         * silver.employee_data
         * silver.employee_engagement_survey_data
         * silver.recruitment_data
         * silver.training_and_development_data
+    - Gold schema tables (dimension and fact) must exist.
+    - Gold schema must have SELECT privileges on Silver tables.
+
 Privileges:
-    - Requires INSERT, DELETE, and EXECUTE privileges on Gold schema tables.
-    - Requires SELECT privileges on Silver tables.
-    - Must be able to commit and rollback transactions.
+    - INSERT, DELETE, TRUNCATE, and EXECUTE privileges on Gold tables.
+    - SELECT privileges on required Silver tables.
 
+Parameters:
+    None
 
-Schedule:
-    - Triggered by Silver layer DAG (load_silver_layer) upon completion.
-    - Can also be triggered manually via Airflow UI or CLI.
+Usage without Airflow:
+    EXEC GOLD.LOAD_GOLD_LAYER;
 
 Notes:
-    - All fact tables are truncated before loading to ensure fresh data.
-    - Default/Unknown dimension records prevent referential integrity errors.
-    - Surrogate keys are used for joins between fact and dimension tables.
-    - Procedure should run after Silver layer ETL is complete.
+    - Default/unknown dimension records prevent foreign key violations.
+    - Surrogate keys link Gold facts to dimensions.
+    - Truncation ensures fresh data for each run.
+    - Should be executed after Silver ETL is complete.
 ===============================================================================
-
 */
+
 
 /* 1. Cleanup fact tables*/
 create or replace procedure gold.cleanup_fact_tables is
