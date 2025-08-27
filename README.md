@@ -18,7 +18,7 @@
   - [Airflow & Dependencies](#airflow--dependencies-1)
   - [การเชื่อมต่อฐานข้อมูลใน DAGs](#การเชื่อมต่อฐานข้อมูลใน-dags)
 
-
+---
 
 ## English Version
 
@@ -33,10 +33,14 @@ This system is designed to process and store HR data using Apache Airflow for ET
 
 Airflow reads the CSV files from the [data/](data/) folder, processes them, and loads the results into Oracle Database using SQL scripts located in [scripts/](scripts/).
 
+---
+
 ### Data Architecture: Medallion Layers
 * Bronze: Raw data ingestion; tables closely match the source CSV structure.
 * Silver: Cleaned and transformed data; additional columns are derived, and data from multiple sources is combined.
 * Gold: Analytics-ready layer; aggregates and structured tables for reporting, often in star schema format.
+
+---
 
 ### Airflow Environment
 The Airflow environment is defined using [airflow-docker/docker-compose.yml](airflow-docker/docker-compose.yml) and [airflow-docker/Dockerfile](airflow-docker/Dockerfile). Key components include:
@@ -45,6 +49,8 @@ The Airflow environment is defined using [airflow-docker/docker-compose.yml](air
 * Worker: Runs individual task instances in DAGs.
 * PostgreSQL: Metadata database for Airflow.
 * Oracle Database: Target database for HR analytics.
+
+---
 
 ### Data Pipelines (DAGs)
 DAGs are stored in [airflow-docker/dags/](airflow-docker/dags/). Each DAG represents an ETL workflow for a specific layer:
@@ -58,6 +64,8 @@ DAGs are stored in [airflow-docker/dags/](airflow-docker/dags/). Each DAG repres
 * Gold Layer (load_gold_layer.py):
   * Aggregates and transforms Silver data for analytics-ready tables.
   * Creates views or star schema tables using SQL (ddl_gold.sql, proc_gold_agg.sql, proc_gold_star.sql).
+
+---
  
 ### Data Files
 Datasets are retrieved from Ravender Singh Rana. (2023). Employee/HR Dataset (All in One) [Data set]. Kaggle. https://doi.org/10.34740/KAGGLE/DS/3620223.
@@ -67,12 +75,18 @@ CSV files in [data/](data/) are the source for ETL workflows:
 * recruitment_data.csv
 * training_and_development_data.csv
 
+---
+
 ### Airflow & Dependencies
 * Python dependencies are listed in [requirements.txt](requirements.txt), including Airflow, Airflow providers for Oracle, Docker, Pandas, SQLAlchemy, and cx_Oracle.
 * [airflow-docker/Dockerfile](airflow-docker/Dockerfile) sets up the Airflow environment on python:3.9-slim-buster and installs necessary dependencies.
+  
+---
 
 ### Database Connections in DAGs
 DAGs use OracleHook or OracleOperator to execute SQL scripts on Oracle Database. Connection details (host, port, user, password, service name) are configured in Airflow Connections.
+
+---
 
 ## Thai Version
 
@@ -87,11 +101,15 @@ DAGs use OracleHook or OracleOperator to execute SQL scripts on Oracle Database.
 
 Airflow จะอ่านไฟล์ CSV จากโฟลเดอร์ `[data/](data/)` ประมวลผล และโหลดผลลัพธ์ไปยัง Oracle Database โดยใช้ SQL scripts ใน `[scripts/](scripts/)`
 
+---
+
 ### สถาปัตยกรรมข้อมูล: Medallion Layers
 
 - **Bronze**: โหลดข้อมูลดิบจาก CSV; ตารางจะใกล้เคียงกับโครงสร้างต้นทาง  
 - **Silver**: ข้อมูลที่ทำความสะอาดและแปลงชนิดข้อมูลแล้ว; รวมข้อมูลจากหลายแหล่ง และสร้างคอลัมน์ใหม่ที่จำเป็น  
 - **Gold**: ข้อมูลพร้อมวิเคราะห์; สร้างตารางสรุป ผลรวม และมุมมองสำหรับรายงานหรือ Star Schema
+
+---
 
 ### Airflow Environment
 
@@ -125,8 +143,7 @@ DAGs อยู่ใน `[airflow-docker/dags/](airflow-docker/dags/)` แต่
 ---
 
 ### ไฟล์ข้อมูล
-
-ไฟล์ CSV ใน `[data/](data/)` เป็นแหล่งข้อมูลสำหรับ DAGs:
+ใช้ข้อมูลจำลองจาก Singh Rana. (2023). Employee/HR Dataset (All in One) [Data set]. Kaggle. https://doi.org/10.34740/KAGGLE/DS/3620223. โดยไฟล์ CSV ใน `[data/](data/)` เป็นแหล่งข้อมูลสำหรับ DAGs ประกอบด้วย:
 
 - `employee_data.csv`  
 - `employee_engagement_survey_data.csv`  
