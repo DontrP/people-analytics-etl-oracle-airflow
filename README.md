@@ -5,7 +5,7 @@
   - [Project Overview](#project-overview)
   - [Data Architecture: Medallion Layers](#data-architecture-medallion-layers)
   - [Airflow Environment](#airflow-environment)
-  - [Data Pipeline (DAGs)](#data-pipeline-dags)
+  - [Data Pipeline (DAGs)](#data-pipeline-(dags))
   - [Data Files](#data-files)
   - [Airflow & Dependencies](#arflow-dependencies)
   - [Database Connections in DAGs](#database-connection)
