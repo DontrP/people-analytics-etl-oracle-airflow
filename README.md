@@ -5,6 +5,7 @@
   - [Project Overview](#project-overview)
   - [Airflow Environment](#airflow-environment)
   - [Data Pipeline (DAGs)](#data-pipeline-dags)
+  - [Data Files](#data-files)
 - [Thai Version](#thai-version)
   - [ภาพรวมระบบ](#ภาพรวมระบบ)
   - [Airflow Environment](#airflow-environment-1)
@@ -43,6 +44,18 @@ DAGs are stored in [airflow-docker/dags/](airflow-docker/dags/). Each DAG repres
 * Gold Layer (load_gold_layer.py):
   * Aggregates and transforms Silver data for analytics-ready tables.
   * Creates views or star schema tables using SQL (ddl_gold.sql, proc_gold_agg.sql, proc_gold_star.sql).
+ 
+### Data Files
+Datasets are retrieved from Ravender Singh Rana. (2023). Employee/HR Dataset (All in One) [Data set]. Kaggle. https://doi.org/10.34740/KAGGLE/DS/3620223
+CSV files in [data/](data/) are the source for ETL workflows:
+* employee_data.csv
+* employee_engagement_survey_data.csv
+* recruitment_data.csv
+* training_and_development_data.csv
+
+### Airflow & Dependencies
+Python dependencies are listed in [requirements.txt](requirements.txt), including Airflow, Airflow providers for Oracle, Docker, Pandas, SQLAlchemy, and cx_Oracle.
+[airflow-docker/Dockerfile](airflow-docker/Dockerfile) sets up the Airflow environment on python:3.9-slim-buster and installs necessary dependencies.
 
 ## Thai Version
 
