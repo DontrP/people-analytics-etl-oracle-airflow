@@ -203,12 +203,11 @@ def test_oracle_connection(**kwargs):
 with DAG(
     dag_id="load_bronze_layer",
     start_date=datetime(2025, 1, 1),
-    schedule_interval="@daily",
+    schedule_interval="@daily",  # Schedule to run dag daily
     catchup=False,
     tags=["raw", "oracle", "bronze", "csv", "etl"],
 ) as dag:
 
-    
     test_conn = PythonOperator(
         task_id="test_oracle_connection",
         python_callable=test_oracle_connection,
@@ -219,6 +218,7 @@ with DAG(
         python_callable=load_all_bronze,
     )
     
+    # If run, trigger the silver layer DAG
     trigger_silver = TriggerDagRunOperator(
         task_id="trigger_silver",
         trigger_dag_id="load_silver_layer"
