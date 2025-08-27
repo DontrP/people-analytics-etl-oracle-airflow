@@ -2,28 +2,35 @@
 DAG: load_bronze_layer
 ======================
 
-This DAG loads raw CSV files into the **Bronze Layer** (Oracle schema `bronze`).
+Purpose:
+    Load raw CSV files into the Bronze layer (Oracle schema 'bronze').
 
-- Each task reads a CSV file from `/data/`
-- Columns are mapped and cast to match the Oracle `bronze` table schema
-- Existing data in the target table is truncated before reload
-- Bulk inserts are executed via `oracledb` for efficiency
-
-Dependencies:
-- Airflow connection `oracle_default` must be defined in Airflow UI
-  with correct Oracle credentials (host, port, service/schema).
-- Oracle `bronze` schema tables must already exist (created by DDL script).
-- CSV files must be available in `/data/`.
+Workflow:
+    1. Test Oracle connection.
+    2. Truncate target table.
+    3. Read CSV from /data/, map and cast columns to match Oracle table schema.
+    4. Bulk insert data into Bronze tables.
+    5. Trigger Silver layer DAG upon completion.
 
 Tables handled:
-- `bronze.employee_data`
-- `bronze.employee_engagement_survey_data`
-- `bronze.recruitment_data`
-- `bronze.training_and_development_data`
+    - bronze.employee_data
+    - bronze.employee_engagement_survey_data
+    - bronze.recruitment_data
+    - bronze.training_and_development_data
+
+Dependencies:
+    - Airflow connection 'oracle_default' with correct credentials.
+    - Bronze schema tables must already exist.
+    - CSV files must be present in /data/.
+
+Schedule:
+    Daily (@daily)
 """
+
 
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.operators.trigger_dagrun import TriggerDagRunOperator
 from airflow.hooks.base import BaseHook
 from airflow.utils.dates import days_ago
 from datetime import datetime
@@ -195,17 +202,26 @@ def test_oracle_connection(**kwargs):
 
 with DAG(
     dag_id="load_bronze_layer",
-    start_date=days_ago(1),
-    schedule_interval=None,
+    start_date=datetime(2025, 1, 1),
+    schedule_interval="@daily",
     catchup=False,
+    tags=["raw", "oracle", "bronze", "csv", "etl"],
 ) as dag:
+
+    
     test_conn = PythonOperator(
         task_id="test_oracle_connection",
         python_callable=test_oracle_connection,
     )
+    
     load_bronze_task = PythonOperator(
         task_id="load_bronze",
         python_callable=load_all_bronze,
     )
+    
+    trigger_silver = TriggerDagRunOperator(
+        task_id="trigger_silver",
+        trigger_dag_id="load_silver_layer"
+    )
 
-test_conn >> load_bronze_task
+    test_conn >> load_bronze_task >> trigger_silver
